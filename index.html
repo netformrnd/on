@@ -1387,7 +1387,8 @@
             // 🔍 검색키워드: 이메일수신자 - 아래 배열에 수신자 이메일을 추가/삭제할 수 있습니다
             const recipientEmails = [
                 'sny25@netformrnd.com',
-                'yoojin83@netformrnd.com'
+                'yoojin83@netformrnd.com',
+                'yurim@netformrnd.com'
             ];
 
             try {
@@ -1619,11 +1620,21 @@
             }
         }
 
+        let isSubmitting = false; // 중복 제출 방지 플래그
+
         async function submitForm() {
+            // 중복 실행 방지
+            if (isSubmitting) {
+                console.log('⚠️ 이미 제출이 진행 중입니다.');
+                return;
+            }
+            isSubmitting = true;
+
             // 🔍 html2canvas 라이브러리 로딩 확인
             if (typeof html2canvas === 'undefined') {
                 alert('⚠️ 시스템 로딩 중입니다.\n\n잠시 후 다시 시도해주세요.\n\n(html2canvas 라이브러리를 불러오는 중입니다)');
                 console.error('html2canvas 라이브러리가 아직 로드되지 않았습니다.');
+                isSubmitting = false;
                 return;
             }
 
@@ -1650,6 +1661,7 @@
                 submitBtn.innerText = originalText;
                 submitBtn.style.opacity = '1';
                 submitBtn.style.cursor = 'pointer';
+                isSubmitting = false;
                 return;
             }
 
@@ -1666,6 +1678,7 @@
                 submitBtn.innerText = originalText;
                 submitBtn.style.opacity = '1';
                 submitBtn.style.cursor = 'pointer';
+                isSubmitting = false;
                 return;
             }
 
@@ -1679,6 +1692,7 @@
                 submitBtn.innerText = originalText;
                 submitBtn.style.opacity = '1';
                 submitBtn.style.cursor = 'pointer';
+                isSubmitting = false;
                 return;
             }
 
@@ -1690,6 +1704,7 @@
                 submitBtn.innerText = originalText;
                 submitBtn.style.opacity = '1';
                 submitBtn.style.cursor = 'pointer';
+                isSubmitting = false;
                 return;
             }
 
@@ -1700,6 +1715,7 @@
                 submitBtn.innerText = originalText;
                 submitBtn.style.opacity = '1';
                 submitBtn.style.cursor = 'pointer';
+                isSubmitting = false;
                 return;
             }
 
@@ -1709,6 +1725,7 @@
                 submitBtn.innerText = originalText;
                 submitBtn.style.opacity = '1';
                 submitBtn.style.cursor = 'pointer';
+                isSubmitting = false;
                 return;
             }
 
@@ -1720,6 +1737,7 @@
                 submitBtn.innerText = originalText;
                 submitBtn.style.opacity = '1';
                 submitBtn.style.cursor = 'pointer';
+                isSubmitting = false;
                 return;
             }
 
@@ -1779,7 +1797,7 @@
                 submitBtn.style.backgroundColor = '#10b981';
 
                 // 🔍 검색키워드: 제출알림 수정 - 아래 alert 메시지의 담당자 정보를 변경할 수 있습니다
-                alert('✅ 온보딩 제출이 완료되었습니다!\n\n✔️ 이메일 전송 완료\n   - sny25@netformrnd.com\n   - yoojin83@netformrnd.com\n✔️ 모든 정보와 첨부파일이 전송되었습니다.\n\n담당자: 주유진\n이메일: yoojin83@netformrnd.com');
+                alert('✅ 온보딩 제출이 완료되었습니다!\n\n✔️ 이메일 전송 완료\n   - sny25@netformrnd.com\n   - yoojin83@netformrnd.com\n   - yurim@netformrnd.com\n✔️ 모든 정보와 첨부파일이 전송되었습니다.\n\n담당자: 주유진\n이메일: yoojin83@netformrnd.com');
 
                 document.getElementById('modal').classList.add('show');
 
@@ -1790,6 +1808,7 @@
                 submitBtn.innerText = originalText;
                 submitBtn.style.opacity = '1';
                 submitBtn.style.cursor = 'pointer';
+                isSubmitting = false;
             }
         }
 
