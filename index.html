@@ -101,6 +101,27 @@
             margin-bottom: 24px;
         }
 
+        .input-grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .sub-section-head {
+            margin-bottom: 12px;
+        }
+
+        .sub-section-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .sub-section-desc {
+            font-size: 0.85em;
+            color: #787774;
+            line-height: 1.5;
+        }
+
         .input-group {
             display: flex;
             flex-direction: column;
@@ -453,6 +474,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .input-grid-3 {
+                grid-template-columns: 1fr;
+            }
+
             .card-grid {
                 grid-template-columns: 1fr;
             }
@@ -547,6 +572,26 @@
                     <input type="email" id="email" placeholder="example@gmail.com">
                 </div>
 
+            </div>
+
+            <div class="sub-section-head">
+                <div class="sub-section-title">🆘 비상 연락망 <span style="color: #e03e3e; font-weight: 600;">*</span></div>
+                <div class="sub-section-desc">입사자 본인과 연락이 닿지 않을 경우, 대신 연락드릴 수 있는 분(가족 등)의 정보를 기재해주세요.</div>
+            </div>
+
+            <div class="input-grid input-grid-3">
+                <div class="input-group">
+                    <label>비상연락 성명 *</label>
+                    <input type="text" id="emergencyName" placeholder="홍길순">
+                </div>
+                <div class="input-group">
+                    <label>본인과의 관계 *</label>
+                    <input type="text" id="emergencyRelation" placeholder="예) 배우자, 부모, 형제자매">
+                </div>
+                <div class="input-group">
+                    <label>비상 연락처 *</label>
+                    <input type="tel" id="emergencyPhone" placeholder="010-0000-0000">
+                </div>
             </div>
         </div>
 
@@ -1058,6 +1103,9 @@
                 formatBirthDate(e.target); // 생년월일과 동일한 형식 (YYYY-MM-DD)
             });
             document.getElementById('email').addEventListener('input', updatePreviews);
+            document.getElementById('emergencyPhone').addEventListener('input', function (e) {
+                formatPhoneNumber(e.target);
+            });
 
         });
 
@@ -1336,7 +1384,7 @@
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyReY-GFpupk8Bq4HJm1L1L-BfgJxdiBvIsF7z0RLwS51m3QTeEq0nKGbDTpbQkXAqEaQ/exec';
 
         // 모든 데이터와 파일을 이메일로 전송하는 함수
-        async function sendAllDataToEmail(name, birth, address, startDate, phone, email, hiworksId, jandiEmail, agreeGuide, agreePrivacy) {
+        async function sendAllDataToEmail(name, birth, address, startDate, phone, email, emergencyName, emergencyRelation, emergencyPhone, hiworksId, jandiEmail, agreeGuide, agreePrivacy) {
             const startTime = Date.now(); // 시작 시간 측정
 
             const files = [
@@ -1354,7 +1402,7 @@
             fileDataArray.push(privacyAgreementImage);
 
             // 2. 입사자 정보 요약 + 서명 이미지 생성 및 추가
-            const summaryImage = await generateSummaryWithSignature(name, birth, address, startDate, phone, email, hiworksId, jandiEmail, agreeGuide, agreePrivacy);
+            const summaryImage = await generateSummaryWithSignature(name, birth, address, startDate, phone, email, emergencyName, emergencyRelation, emergencyPhone, hiworksId, jandiEmail, agreeGuide, agreePrivacy);
             fileDataArray.push(summaryImage);
 
             for (const fileInfo of files) {
@@ -1397,6 +1445,10 @@
                     senderStartDate: startDate,
                     senderPhone: phone,
                     senderEmail: email,
+                    // 비상 연락망
+                    emergencyName: emergencyName,
+                    emergencyRelation: emergencyRelation,
+                    emergencyPhone: emergencyPhone,
                     // 계정 설정
                     hiworksId: hiworksId,
                     jandiEmail: jandiEmail,
@@ -1433,7 +1485,7 @@
 
         // 개인정보 동의서를 이미지로 변환하는 함수
         // 입사자 정보 요약 + 서명 이미지 생성 함수
-        async function generateSummaryWithSignature(name, birth, address, startDate, phone, email, hiworksId, jandiEmail, agreeGuide, agreePrivacy) {
+        async function generateSummaryWithSignature(name, birth, address, startDate, phone, email, emergencyName, emergencyRelation, emergencyPhone, hiworksId, jandiEmail, agreeGuide, agreePrivacy) {
             console.log('📄 입사자 정보 요약 + 서명 이미지 생성 시작...');
 
             // 서명 캔버스
@@ -1465,6 +1517,15 @@
                         <div><strong>휴대폰:</strong> ${phone}</div>
                         <div><strong>이메일:</strong> ${email}</div>
 
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 25px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid #e03e3e;">
+                    <h2 style="font-size: 18px; font-weight: 600; color: #333; margin: 0 0 15px 0;">1-1. 비상 연락망 (본인 연락 불가 시)</h2>
+                    <div style="font-size: 14px; line-height: 1.8; color: #444;">
+                        <div><strong>성명:</strong> ${emergencyName}</div>
+                        <div><strong>본인과의 관계:</strong> ${emergencyRelation}</div>
+                        <div><strong>연락처:</strong> ${emergencyPhone}</div>
                     </div>
                 </div>
                 
@@ -1643,10 +1704,24 @@
             const startDate = document.getElementById('startDate').value;
             const phone = document.getElementById('phone').value.trim();
             const email = document.getElementById('email').value.trim();
+            // 비상 연락망 (본인 연락 불가 시) - 필수
+            const emergencyName = document.getElementById('emergencyName').value.trim();
+            const emergencyRelation = document.getElementById('emergencyRelation').value.trim();
+            const emergencyPhone = document.getElementById('emergencyPhone').value.trim();
 
 
             if (!name || !birth || !address || !startDate || !phone || !email) {
                 alert('입사자 정보 입력란의 모든 필수 정보를 입력해주세요. (*)');
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalText;
+                submitBtn.style.opacity = '1';
+                submitBtn.style.cursor = 'pointer';
+                isSubmitting = false;
+                return;
+            }
+
+            if (!emergencyName || !emergencyRelation || !emergencyPhone) {
+                alert('비상 연락망 정보를 모두 입력해주세요. (*)\n\n- 비상연락 성명\n- 본인과의 관계\n- 비상 연락처');
                 submitBtn.disabled = false;
                 submitBtn.innerText = originalText;
                 submitBtn.style.opacity = '1';
@@ -1750,6 +1825,10 @@
                 phone: phone,
                 email: email,
 
+                // 1-1. 비상 연락망
+                emergencyName: emergencyName,
+                emergencyRelation: emergencyRelation,
+                emergencyPhone: emergencyPhone,
 
                 // 2. 사용자 계정 설정
                 hiworksId: hiworksId,
@@ -1779,7 +1858,7 @@
                 // 10. 이메일 전송 (데이터 + 파일)
                 submitBtn.innerText = '📧 이메일 전송 중... (1~2분 소요)';
                 console.log('이메일 전송 시작...');
-                await sendAllDataToEmail(name, birth, address, startDate, phone, email, hiworksId, jandiEmail, agreeGuide, agreePrivacy);
+                await sendAllDataToEmail(name, birth, address, startDate, phone, email, emergencyName, emergencyRelation, emergencyPhone, hiworksId, jandiEmail, agreeGuide, agreePrivacy);
                 console.log('✅ 이메일 전송 완료!');
 
                 // 11. 최종 완료 메시지
