@@ -617,7 +617,7 @@
                 <div id="check1" class="sub-items" style="display: none; margin-left: 32px; margin-bottom: 16px;">
                     <div
                         style="background: #f7f6f3; padding: 12px 16px; border-radius: 4px; border-left: 3px solid #2383e2; font-size: 0.9em; line-height: 1.6; color: #37352f;">
-                        출입 등록은 경영관리팀 주유진님께서 진행해주실 예정입니다.<br>
+                        출입 등록은 경영관리팀 김유림님께서 진행해주실 예정입니다.<br>
                         별도 요청이 있을 경우, 안내에 따라 함께 진행해주세요.
                     </div>
                 </div>
@@ -653,6 +653,29 @@
                                     onchange="handleFile(this, &#39;name2&#39;)">
                             </label>
                             <div class="file-name" id="name2"
+                                style="margin-left: 0; margin-top: 8px; display: flex; align-items: center; justify-content: space-between; font-size: 0.75em;">
+                                <span>선택된 파일 없음</span>
+                            </div>
+                        </div>
+                        <div class="file-upload-item">
+                            <span class="file-upload-label">건강보험 자격득실확인서</span>
+                            <button type="button" onclick="toggleHealthGuide(this)"
+                                style="display: block; background: none; border: none; padding: 0; margin: -4px 0 8px; cursor: pointer; color: #2383e2; font-size: 0.85em; font-weight: 600; font-family: inherit; text-align: left;">발급 방법 보기 ▾</button>
+                            <div id="healthGuide"
+                                style="display: none; margin-bottom: 8px; font-size: 0.85em; color: #787774; line-height: 1.6;">
+                                <a href="https://www.nhis.or.kr/nhis/minwon/minwonServiceBoard.do" target="_blank"
+                                    rel="noopener"
+                                    style="color: #2383e2; font-weight: 600; text-decoration: underline;">국민건강보험공단 바로가기 →</a><br>
+                                로그인 &gt; 자격득실확인서 발급 &gt; 프린트 발급<br>
+                                <span style="color: #e03e3e; font-weight: 600;">*다운받은 PDF의 암호(생년월일)를 해제 후
+                                    첨부해주세요</span><br>
+                                암호 해제 방법 : 다운받은 PDF &gt; 인쇄 &gt; PDF로 저장 &gt; 새 파일명으로 저장
+                            </div>
+                            <label class="file-button">파일 선택
+                                <input type="file" id="file5" style="display: none;"
+                                    onchange="handleFile(this, &#39;name5&#39;)">
+                            </label>
+                            <div class="file-name" id="name5"
                                 style="margin-left: 0; margin-top: 8px; display: flex; align-items: center; justify-content: space-between; font-size: 0.75em;">
                                 <span>선택된 파일 없음</span>
                             </div>
@@ -703,7 +726,7 @@
                 <div id="check3" class="sub-items" style="display: none; margin-left: 32px; margin-bottom: 16px;">
                     <div
                         style="background: #f7f6f3; padding: 12px 16px; border-radius: 4px; border-left: 3px solid #2383e2; font-size: 0.9em; line-height: 1.6; color: #37352f;">
-                        경영관리팀에서 이메일로 별도 안내 예정입니다.
+                        출근하시면 경영관리팀에서 안내해드릴 예정입니다.
                     </div>
                 </div>
 
@@ -737,8 +760,8 @@
                         <label>초기 비밀번호 안내</label>
                         <div
                             style="background: #fef3c7; border: 1px solid #fbbf24; border-radius: 6px; padding: 12px; font-size: 0.9em; line-height: 1.6;">
-                            <div style="color: #92400e; font-weight: 600; margin-bottom: 4px;">잔디 초기 비밀번호: <code
-                                    style="background: #fff; padding: 2px 6px; border-radius: 3px; font-family: monospace;">net2021@</code>
+                            <div style="color: #92400e; font-weight: 600; margin-bottom: 4px;">하이웍스 초기 비밀번호: <code
+                                    style="background: #fff; padding: 2px 6px; border-radius: 3px; font-family: monospace;">123456789a</code>
                             </div>
                             <div style="color: #78350f;">보안을 위해 최초 로그인 후 반드시 비밀번호를 변경해주세요.</div>
                         </div>
@@ -1260,6 +1283,14 @@
             updateProgress();
         }
 
+        // 건강보험 자격득실확인서 발급 방법 토글
+        function toggleHealthGuide(btn) {
+            const guide = document.getElementById('healthGuide');
+            const willOpen = guide.style.display === 'none';
+            guide.style.display = willOpen ? 'block' : 'none';
+            btn.innerHTML = willOpen ? '발급 방법 닫기 ▴' : '발급 방법 보기 ▾';
+        }
+
         function toggleWelfare() {
             const toggle = document.getElementById('welfareToggle');
             const status = document.getElementById('welfareStatus');
@@ -1395,7 +1426,8 @@
                 { id: 'file1', name: '주민등록등본' },
                 { id: 'file2', name: '통장사본' },
                 { id: 'file3', name: '원천징수영수증' },
-                { id: 'file4', name: '인사카드' }
+                { id: 'file4', name: '인사카드' },
+                { id: 'file5', name: '건강보험자격득실확인서' }
             ];
 
             // 각 파일을 Base64로 변환
@@ -1539,7 +1571,7 @@
                         <div><strong>하이웍스 계정 생성에 사용할 아이디:</strong> ${hiworksId}</div>
                         <div><strong>잔디 계정 생성에 사용할 이메일 주소:</strong> ${jandiEmail}</div>
                         <div style="margin-top: 10px; padding: 10px; background: #fef3c7; border-radius: 4px; color: #92400e;">
-                            <strong>잔디 초기 비밀번호:</strong> net2021@ (최초 로그인 후 변경 필수)
+                            <strong>하이웍스 초기 비밀번호:</strong> 123456789a (최초 로그인 후 변경 필수)
                         </div>
                     </div>
                 </div>
@@ -1739,10 +1771,11 @@
             const file2 = document.getElementById('file2').files.length > 0; // 통장사본 (필수)
             const file3 = document.getElementById('file3').files.length > 0; // 원천징수영수증 (선택)
             const file4 = document.getElementById('file4').files.length > 0; // 인사카드 (필수)
+            const file5 = document.getElementById('file5').files.length > 0; // 건강보험 자격득실확인서 (필수)
 
             // 필수 파일만 체크 (원천징수영수증 제외)
-            if (!file1 || !file2 || !file4) {
-                alert('필수 제출 서류를 모두 업로드해주세요. (*)\n\n[필수]\n- 주민등록등본\n- 통장사본\n- 인사카드\n\n[선택]\n- 원천징수영수증 (해당자만)');
+            if (!file1 || !file2 || !file4 || !file5) {
+                alert('필수 제출 서류를 모두 업로드해주세요. (*)\n\n[필수]\n- 주민등록등본\n- 통장사본\n- 건강보험 자격득실확인서\n- 인사카드\n\n[선택]\n- 원천징수영수증 (해당자만)');
                 submitBtn.disabled = false;
                 submitBtn.innerText = originalText;
                 submitBtn.style.opacity = '1';
@@ -1851,7 +1884,8 @@
                     residentCard: file1 ? '첨부완료' : '미첨부',
                     bankbook: file2 ? '첨부완료' : '미첨부',
                     taxDocument: file3 ? '첨부완료' : '미첨부',
-                    employeeCard: file4 ? '첨부완료' : '미첨부'
+                    employeeCard: file4 ? '첨부완료' : '미첨부',
+                    healthInsurance: file5 ? '첨부완료' : '미첨부'
                 }
             };
 
