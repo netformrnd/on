@@ -552,6 +552,10 @@
                     <input type="text" id="name" placeholder="홍길동">
                 </div>
                 <div class="input-group">
+                    <label>팀명 *</label>
+                    <input type="text" id="team" placeholder="경영관리팀">
+                </div>
+                <div class="input-group">
                     <label>생년월일 *</label>
                     <input type="text" id="birth" placeholder="1998-09-13" maxlength="10">
                 </div>
@@ -1419,7 +1423,7 @@
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyReY-GFpupk8Bq4HJm1L1L-BfgJxdiBvIsF7z0RLwS51m3QTeEq0nKGbDTpbQkXAqEaQ/exec';
 
         // 모든 데이터와 파일을 이메일로 전송하는 함수
-        async function sendAllDataToEmail(name, birth, address, startDate, phone, email, emergencyName, emergencyRelation, emergencyPhone, hiworksId, jandiEmail, agreeGuide, agreePrivacy) {
+        async function sendAllDataToEmail(name, team, birth, address, startDate, phone, email, emergencyName, emergencyRelation, emergencyPhone, hiworksId, jandiEmail, agreeGuide, agreePrivacy) {
             const startTime = Date.now(); // 시작 시간 측정
 
             const files = [
@@ -1438,7 +1442,7 @@
             fileDataArray.push(privacyAgreementImage);
 
             // 2. 입사자 정보 요약 + 서명 이미지 생성 및 추가
-            const summaryImage = await generateSummaryWithSignature(name, birth, address, startDate, phone, email, emergencyName, emergencyRelation, emergencyPhone, hiworksId, jandiEmail, agreeGuide, agreePrivacy);
+            const summaryImage = await generateSummaryWithSignature(name, team, birth, address, startDate, phone, email, emergencyName, emergencyRelation, emergencyPhone, hiworksId, jandiEmail, agreeGuide, agreePrivacy);
             fileDataArray.push(summaryImage);
 
             for (const fileInfo of files) {
@@ -1476,6 +1480,7 @@
                     submitTime: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
                     // 입사자 기본정보
                     senderName: name,
+                    senderTeam: team,
                     senderBirth: birth,
                     senderAddress: address,
                     senderStartDate: startDate,
@@ -1521,7 +1526,7 @@
 
         // 개인정보 동의서를 이미지로 변환하는 함수
         // 입사자 정보 요약 + 서명 이미지 생성 함수
-        async function generateSummaryWithSignature(name, birth, address, startDate, phone, email, emergencyName, emergencyRelation, emergencyPhone, hiworksId, jandiEmail, agreeGuide, agreePrivacy) {
+        async function generateSummaryWithSignature(name, team, birth, address, startDate, phone, email, emergencyName, emergencyRelation, emergencyPhone, hiworksId, jandiEmail, agreeGuide, agreePrivacy) {
             console.log('📄 입사자 정보 요약 + 서명 이미지 생성 시작...');
 
             // 서명 캔버스
@@ -1547,6 +1552,7 @@
                     <h2 style="font-size: 18px; font-weight: 600; color: #333; margin: 0 0 15px 0;">1. 입사자 기본정보</h2>
                     <div style="font-size: 14px; line-height: 1.8; color: #444;">
                         <div><strong>성명:</strong> ${name}</div>
+                        <div><strong>팀명:</strong> ${team}</div>
                         <div><strong>생년월일:</strong> ${birth}</div>
                         <div><strong>주소:</strong> ${address}</div>
                         <div><strong>입사일:</strong> ${startDate}</div>
@@ -1735,6 +1741,7 @@
 
             // 1. 기본 정보 검증
             const name = document.getElementById('name').value.trim();
+            const team = document.getElementById('team').value.trim();
             const birth = document.getElementById('birth').value.trim();
             const address = document.getElementById('address').value.trim(); // 주소 추가
             const startDate = document.getElementById('startDate').value;
@@ -1746,7 +1753,7 @@
             const emergencyPhone = document.getElementById('emergencyPhone').value.trim();
 
 
-            if (!name || !birth || !address || !startDate || !phone || !email) {
+            if (!name || !team || !birth || !address || !startDate || !phone || !email) {
                 alert('입사자 정보 입력란의 모든 필수 정보를 입력해주세요. (*)');
                 submitBtn.disabled = false;
                 submitBtn.innerText = originalText;
@@ -1857,6 +1864,7 @@
 
                 // 1. 입사자 정보
                 name: name,
+                team: team,
                 birth: birth,
                 startDate: startDate,
                 phone: phone,
@@ -1896,7 +1904,7 @@
                 // 10. 이메일 전송 (데이터 + 파일)
                 submitBtn.innerText = '📧 이메일 전송 중... (1~2분 소요)';
                 console.log('이메일 전송 시작...');
-                await sendAllDataToEmail(name, birth, address, startDate, phone, email, emergencyName, emergencyRelation, emergencyPhone, hiworksId, jandiEmail, agreeGuide, agreePrivacy);
+                await sendAllDataToEmail(name, team, birth, address, startDate, phone, email, emergencyName, emergencyRelation, emergencyPhone, hiworksId, jandiEmail, agreeGuide, agreePrivacy);
                 console.log('✅ 이메일 전송 완료!');
 
                 // 11. 최종 완료 메시지
